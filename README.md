@@ -16,6 +16,11 @@ Java wrapper, whose release jar contains the native engines:
 {:deps {dev.vevdb/vev-clj {:mvn/version "0.1.0"}}}
 ```
 
+The verified `0.1.0` jar and POM are currently available from the
+[VevDB prerelease](https://github.com/vevdb/vev/releases/tag/v0.1.0-rc.3).
+Anonymous Maven-coordinate resolution will begin when the `dev.vevdb`
+namespace is published to Maven Central.
+
 The source repository can be consumed through a Git coordinate:
 
 ```clojure
@@ -26,9 +31,18 @@ The source repository can be consumed through a Git coordinate:
    :git/sha "<release-sha>"}}}
 ```
 
-Its `deps.edn` brings in the published `vev-java` artifact, which contains the
-native VevDB engine. Both forms therefore provide the same self-contained
-runtime.
+Its `deps.edn` brings in the `vev-java` artifact, which contains the native
+VevDB engine. Both forms therefore provide the same self-contained runtime once
+that artifact is available from Maven Central or the local Maven repository.
+
+During the prerelease window, installing the downloaded Java jar and POM into
+the local Maven repository is sufficient for the Git coordinate above:
+
+```sh
+mvn install:install-file \
+  -Dfile=vev-java-0.1.0.jar \
+  -DpomFile=vev-java-0.1.0.pom
+```
 
 Application code should not pass Java paths or native library paths around:
 
