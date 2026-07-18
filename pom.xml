@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>dev.vevdb</groupId>
+  <artifactId>vev-clj</artifactId>
+  <version>0.1.0</version>
+  <name>VevDB for Clojure</name>
+  <description>Clojure API for the VevDB embedded database.</description>
+  <url>https://github.com/vevdb/vev-clj</url>
+
+  <licenses>
+    <license>
+      <name>Eclipse Public License 2.0</name>
+      <url>https://www.eclipse.org/legal/epl-2.0/</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Andreas Flakstad</name>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:https://github.com/vevdb/vev-clj.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/vevdb/vev-clj.git</developerConnection>
+    <url>https://github.com/vevdb/vev-clj</url>
+    <tag>HEAD</tag>
+  </scm>
+
+  <dependencies>
+    <dependency>
+      <groupId>dev.vevdb</groupId>
+      <artifactId>vev-java</artifactId>
+      <version>0.1.0</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src</directory>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.3.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
+

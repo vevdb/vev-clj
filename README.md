@@ -1,28 +1,28 @@
 # VevDB for Clojure
 
-This is the Clojure package layer for VevDB. It depends on the JVM wrapper in
-`clients/java`, which uses Java 21 Foreign Function & Memory to call the native
-VevDB shared library.
+This is the Clojure package layer for VevDB. It depends on
+[`vev-java`](https://github.com/vevdb/vev-java), which uses Java 21 Foreign
+Function & Memory to call the native VevDB engine.
 
 The public API accepts ordinary Clojure data and serializes it to the same EDN
 text frontend used by C, Python, Rust, and Java callers.
 
-## Intended Published Usage
+## Usage
 
-Normal application setup should be one dependency. The Clojure package should
-pull in the Java wrapper, and the Java wrapper should pull in the right
-platform native artifact, then load the native library itself:
+Normal application setup is one dependency. The Clojure package pulls in the
+Java wrapper, whose release jar contains the native engines:
 
 ```clojure
 {:deps {dev.vevdb/vev-clj {:mvn/version "0.1.0"}}}
 ```
 
-The source repository can instead be consumed through a Git coordinate:
+The source repository can be consumed through a Git coordinate:
 
 ```clojure
 {:deps
- {io.github.vevdb/vev-clj
-  {:git/tag "v0.1.0"
+ {dev.vevdb/vev-clj
+  {:git/url "https://github.com/vevdb/vev-clj"
+   :git/tag "v0.1.0"
    :git/sha "<release-sha>"}}}
 ```
 
@@ -85,66 +85,35 @@ function on either in-memory or durable connections:
 (.close tx)
 ```
 
-The current repo has not published the Java/Clojure/native artifacts yet, so
-local development still has extra setup. The Java loader already supports the
-future packaged shape by checking for bundled native resources after explicit
-local paths.
-
 The durable backend uses SQLite internally. Release builds link SQLite with
 FTS5 into the native VevDB library, so Clojure users do not install or configure
 SQLite; application code opens a VevDB store with `d/connect`.
 
 ## Local Development
 
-Current local source development is path-based:
-
-```clojure
-{:deps {vev/vev-clj {:local/root "clients/clojure"}}}
-```
-
-That path only adds the Clojure source. It is useful when editing this repo, but
-it is not the intended application setup unless the root `:clj-dev` alias or
-equivalent Java/native classpath is also present.
-
-Build the native library and Java classes first:
+Check `vev`, `vev-java`, and `vev-clj` out beside one another. Install the Java
+source artifact, then use this repository directly:
 
 ```sh
+cd ../vev-java
+mvn install
+cd ../vev-clj
+clojure -P
+```
+
+For runtime work against a locally built engine:
+
+```sh
+cd ../vev
 scripts/build_c_abi.sh
-scripts/stage_jvm_native.sh
-scripts/package_jvm.sh
+export VEV_LIB="$PWD/build/lib/libvev.dylib" # macOS example
+cd ../vev-clj
+clojure -M:dev
 ```
 
-`scripts/package_jvm.sh` builds local Java, native-resource, and Clojure jars
-under `build/jvm` and a local Maven-style repository under `build/m2`. Release
-automation combines the verified platform resources into one `vev-java` jar,
-so applications do not select a native artifact.
-
-That local repository can be consumed from a separate test project:
-
-```clojure
-{:mvn/local-repo "/path/to/vev/build/m2"
- :deps {dev.vevdb/vev-clj {:mvn/version "0.1.0"}}
- :aliases {:run {:jvm-opts ["--enable-preview"
-                            "--enable-native-access=ALL-UNNAMED"]}}}
-```
-
-`scripts/smoke_jvm_package.sh` verifies each platform package during its native
-build. `scripts/smoke_jvm_coordinates.sh` verifies the final combined artifacts
-from a fresh Maven project and a fresh Clojure project.
-
-When developing from the repo root, the root `:clj-dev` alias adds the locally
-built Java classes and the required JVM flags:
-
-```sh
-clojure -M:clj-dev
-```
-
-Then open `examples/clojure/getting_started.clj` and evaluate the forms inside
-its `(comment ...)` block one at a time. That command is a repo
-smoke/development concern, not the desired public API.
-Until native artifacts are packaged, no-arg `create-conn` and one-arg
-`connect` resolve the native library from the `vev.library` JVM property, then
-`VEV_LIB`, then a local `build/lib` library, then a bundled platform resource.
+The `:dev` alias enables the Java 21 preview and native-access flags. Released
+artifacts resolve the engine from their bundled platform resource; source
+development can use `vev.library` or `VEV_LIB`.
 
 `q` uses Datomic/DataScript-style query-first argument order. The wrapper also
 accepts DB-first calls for compatibility with earlier VevDB code, but new code

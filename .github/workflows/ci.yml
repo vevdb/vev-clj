@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Clojure and Java 21
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out vev-clj
+        uses: actions/checkout@v4
+        with:
+          path: vev-clj
+      - name: Check out vev-java
+        uses: actions/checkout@v4
+        with:
+          repository: vevdb/vev-java
+          path: vev-java
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - uses: DeLaGuardo/setup-clojure@13.4
+        with:
+          cli: latest
+      - name: Install the sibling Java source artifact
+        working-directory: vev-java
+        run: mvn --batch-mode --no-transfer-progress install
+      - name: Resolve and load the Clojure API
+        working-directory: vev-clj
+        run: |
+          clojure -P
+          clojure -M:dev -e "(require 'vev.core)"
+      - name: Build the Clojure jar
+        working-directory: vev-clj
+        run: mvn --batch-mode --no-transfer-progress verify
