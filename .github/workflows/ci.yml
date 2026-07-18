@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   build:
-    name: Clojure and Java 21
+    name: Clojure and Java 25
     runs-on: ubuntu-24.04
     steps:
       - name: Check out vev-clj
@@ -37,7 +37,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: "21"
+          java-version: "25"
           cache: maven
       - uses: DeLaGuardo/setup-clojure@13.4
         with:
