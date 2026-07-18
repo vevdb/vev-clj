@@ -13,21 +13,21 @@ Normal application setup is one dependency. The Clojure package pulls in the
 Java wrapper, whose release jar contains the native engines:
 
 ```clojure
-{:deps {dev.vevdb/vev-clj {:mvn/version "0.1.0"}}}
+{:deps {com.vevdb/vev-clj {:mvn/version "0.1.0"}}}
 ```
 
-The verified `0.1.0` jar and POM are currently available from the
-[VevDB prerelease](https://github.com/vevdb/vev/releases/tag/v0.1.0-rc.3).
-Anonymous Maven-coordinate resolution will begin when the `dev.vevdb`
-namespace is published to Maven Central.
+The next VevDB prerelease will be the first artifact under `com.vevdb`.
+Anonymous Maven-coordinate resolution will begin when that namespace is
+published to Maven Central. The earlier `v0.1.0-rc.3` artifact used the
+provisional `dev.vevdb` coordinate and Java package.
 
 The source repository can be consumed through a Git coordinate:
 
 ```clojure
 {:deps
- {dev.vevdb/vev-clj
+ {com.vevdb/vev-clj
   {:git/url "https://github.com/vevdb/vev-clj"
-   :git/tag "v0.1.0"
+   :git/tag "<release-tag>"
    :git/sha "<release-sha>"}}}
 ```
 

@@ -23,6 +23,17 @@ jobs:
         with:
           repository: vevdb/vev-java
           path: vev-java
+          fetch-depth: 0
+      - name: Select matching Java client branch when available
+        if: github.head_ref != ''
+        working-directory: vev-java
+        env:
+          SIBLING_BRANCH: ${{ github.head_ref }}
+        run: |
+          if git ls-remote --exit-code origin "refs/heads/$SIBLING_BRANCH" >/dev/null 2>&1; then
+            git fetch origin "refs/heads/$SIBLING_BRANCH"
+            git checkout --detach FETCH_HEAD
+          fi
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
