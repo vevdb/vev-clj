@@ -1,7 +1,7 @@
 # VevDB for Clojure
 
 This is the Clojure package layer for VevDB. It depends on
-[`vev-java`](https://github.com/vevdb/vev-java), which uses Java 21 Foreign
+[`vev-java`](https://github.com/vevdb/vev-java), which uses Java 25 Foreign
 Function & Memory to call the native VevDB engine.
 
 The public API accepts ordinary Clojure data and serializes it to the same EDN
@@ -125,7 +125,7 @@ cd ../vev-clj
 clojure -M:dev
 ```
 
-The `:dev` alias enables the Java 21 preview and native-access flags. Released
+The `:dev` alias enables Java 25 native access. Released
 artifacts resolve the engine from their bundled platform resource; source
 development can use `vev.library` or `VEV_LIB`.
 

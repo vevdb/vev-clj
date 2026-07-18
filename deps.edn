@@ -2,5 +2,4 @@
  :deps {com.vevdb/vev-java {:mvn/version "0.1.0"}}
  :aliases
  {:dev
-  {:jvm-opts ["--enable-preview"
-              "--enable-native-access=ALL-UNNAMED"]}}}
+  {:jvm-opts ["--enable-native-access=ALL-UNNAMED"]}}}
