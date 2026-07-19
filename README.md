@@ -13,11 +13,11 @@ Normal application setup is one dependency. The Clojure package pulls in the
 Java wrapper, whose release jar contains the native engines:
 
 ```clojure
-{:deps {com.vevdb/vev-clj {:mvn/version "0.2.0-rc.1"}}}
+{:deps {com.vevdb/vev-clj {:mvn/version "0.2.0-rc.2"}}}
 ```
 
-The `0.2.0-rc.1` artifacts are available from the
-[VevDB prerelease](https://github.com/vevdb/vev/releases/tag/v0.2.0-rc.1).
+The `0.2.0-rc.2` artifacts are available from the
+[VevDB prerelease](https://github.com/vevdb/vev/releases/tag/v0.2.0-rc.2).
 Anonymous Maven-coordinate resolution will begin when the `com.vevdb`
 namespace is published to Maven Central. The earlier `v0.1.0-rc.3` artifact
 used the provisional `dev.vevdb` coordinate and Java package.
@@ -41,8 +41,8 @@ the local Maven repository is sufficient for the Git coordinate above:
 
 ```sh
 mvn install:install-file \
-  -Dfile=vev-java-0.2.0-rc.1.jar \
-  -DpomFile=vev-java-0.2.0-rc.1.pom
+  -Dfile=vev-java-0.2.0-rc.2.jar \
+  -DpomFile=vev-java-0.2.0-rc.2.pom
 ```
 
 Application code should not pass Java paths or native library paths around:
