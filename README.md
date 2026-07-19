@@ -16,11 +16,12 @@ Java wrapper, whose release jar contains the native engines:
 {:deps {com.vevdb/vev-clj {:mvn/version "0.2.0-rc.2"}}}
 ```
 
-The `0.2.0-rc.2` artifacts are available from the
+The `0.2.0-rc.2` artifacts are available from
+[Maven Central](https://central.sonatype.com/artifact/com.vevdb/vev-clj/0.2.0-rc.2)
+and the
 [VevDB prerelease](https://github.com/vevdb/vev/releases/tag/v0.2.0-rc.2).
-Anonymous Maven-coordinate resolution will begin when the `com.vevdb`
-namespace is published to Maven Central. The earlier `v0.1.0-rc.3` artifact
-used the provisional `dev.vevdb` coordinate and Java package.
+The earlier `v0.1.0-rc.3` artifact used the provisional `dev.vevdb` coordinate
+and Java package.
 
 The source repository can be consumed through a Git coordinate:
 
@@ -33,17 +34,8 @@ The source repository can be consumed through a Git coordinate:
 ```
 
 Its `deps.edn` brings in the `vev-java` artifact, which contains the native
-VevDB engine. Both forms therefore provide the same self-contained runtime once
-that artifact is available from Maven Central or the local Maven repository.
-
-During the prerelease window, installing the downloaded Java jar and POM into
-the local Maven repository is sufficient for the Git coordinate above:
-
-```sh
-mvn install:install-file \
-  -Dfile=vev-java-0.2.0-rc.2.jar \
-  -DpomFile=vev-java-0.2.0-rc.2.pom
-```
+VevDB engine. Both forms therefore provide the same self-contained runtime
+from Maven Central.
 
 Application code should not pass Java paths or native library paths around:
 
