@@ -1,5 +1,5 @@
 {:paths ["src"]
- :deps {com.vevdb/vev-java {:mvn/version "0.2.0-rc.1"}}
+ :deps {com.vevdb/vev-java {:mvn/version "0.2.0-rc.2"}}
  :aliases
  {:dev
   {:jvm-opts ["--enable-native-access=ALL-UNNAMED"]}}}
