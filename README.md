@@ -81,6 +81,33 @@ Durable usage should be similarly direct:
 (d/q '[:find ?name :where [?e :user/name ?name]] (d/db conn))
 ```
 
+Historical database filters use the Datomic names, argument order, and
+inclusive/exclusive boundaries. `#inst` is a `java.util.Date`, so the same form
+works with Datomic Peer and Vev:
+
+```clojure
+(def current (d/db conn))
+(d/as-of current tx) ; inclusive
+(d/as-of current #inst "2026-07-20T10:15:00.000Z")
+(d/since current #inst "2026-07-20T10:15:00.000Z") ; exclusive
+(d/history current)
+
+(d/basis-t current)
+(d/next-t current)
+(d/as-of-t (d/as-of current tx))
+(d/since-t (d/since current tx))
+(d/history? (d/history current))
+
+;; Log range start is inclusive and end is exclusive.
+(d/tx-range (d/log conn) nil nil)
+(d/tx-range (d/log conn) tx-start tx-end)
+(d/tx-range (d/log conn) #inst "2026-07-20" #inst "2026-07-21")
+```
+
+`java.time.Instant` is also accepted by Vev. The
+[history guide](https://github.com/vevdb/vev/blob/main/docs/history.md)
+includes an executable side-by-side comparison with Datomic Peer.
+
 For bulk host writes, `tx-builder` can be passed to the same `d/transact`
 function on either in-memory or durable connections:
 
