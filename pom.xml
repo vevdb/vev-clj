@@ -6,7 +6,7 @@
 
   <groupId>com.vevdb</groupId>
   <artifactId>vev-clj</artifactId>
-  <version>0.2.0-rc.2</version>
+  <version>0.2.0-rc.3</version>
   <name>VevDB for Clojure</name>
   <description>Clojure API for the VevDB embedded database.</description>
   <url>https://github.com/vevdb/vev-clj</url>
@@ -35,7 +35,7 @@
     <dependency>
       <groupId>com.vevdb</groupId>
       <artifactId>vev-java</artifactId>
-      <version>0.2.0-rc.2</version>
+      <version>0.2.0-rc.3</version>
     </dependency>
   </dependencies>
 
