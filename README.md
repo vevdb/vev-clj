@@ -16,12 +16,10 @@ Java wrapper, whose release jar contains the native engines:
 {:deps {com.vevdb/vev-clj {:mvn/version "0.2.0-rc.3"}}}
 ```
 
-The current public `0.2.0-rc.2` artifacts are available from
-[Maven Central](https://central.sonatype.com/artifact/com.vevdb/vev-clj/0.2.0-rc.2)
+The current public `0.2.0-rc.3` artifacts are available from
+[Maven Central](https://central.sonatype.com/artifact/com.vevdb/vev-clj/0.2.0-rc.3)
 and the
-[VevDB prerelease](https://github.com/vevdb/vev/releases/tag/v0.2.0-rc.2).
-The source on `main` is prepared for `0.2.0-rc.3`; use the coordinate above
-after that release is published.
+[VevDB prerelease](https://github.com/vevdb/vev/releases/tag/v0.2.0-rc.3).
 The earlier `v0.1.0-rc.3` artifact used the provisional `dev.vevdb` coordinate
 and Java package.
 
