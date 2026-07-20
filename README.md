@@ -264,8 +264,9 @@ view sees:
 (let [db (d/db conn)
       ada (d/entity db 1)]
   (:user/name ada)
-  (d/entity-values ada :user/email)
-  (d/entity-ref ada :user/friend)
+  (:user/email ada)
+  (:user/name (:user/friend ada))
+  (d/entity-db ada)
   (d/touch ada))
 ```
 
@@ -276,23 +277,35 @@ Lookup refs and idents are supported through the same function:
 (d/entity db :user/ada)
 ```
 
-Transaction functions follow Datomic's installed-ident model: the DB contains
-the function ident, while the host registry supplies the executable callback for
-this process.
+Identity and raw index access use the Datomic names and argument order:
 
 ```clojure
-(with-open [fns (d/tx-fns conn
-                  {:user/set-name
-                   (fn [db e name]
-                     [[:db/add e :user/name name]])})]
-  (d/transact conn [[:db/add 100 :db/ident :user/set-name]])
-  (d/transact conn [[:user/set-name 1 "Ada"]] fns))
+(d/entid db :user/email)
+(d/ident db 90)
+
+(d/datoms db :eavt 1 :user/name)
+(d/seek-datoms db :avet :user/email "m")
+(d/rseek-datoms db :avet :user/email "m")
+(d/index-range db :user/email "a" "n")
 ```
 
-The same shape works with `d/connect` durable handles. The callback receives
-`(db & args)` and returns ordinary tx-data. The DB value is valid for the
-callback call; keep durable application state outside the callback if it needs
-to outlive the transaction.
+Returned datoms support keyword lookup and indexed access, for example
+`(:v datom)` and `(nth datom 2)`.
+
+Use `db` for ordinary reads. When coordinating with another connection or
+process, `sync` returns a future in the Datomic shape:
+
+```clojure
+(def coordinated-db @(d/sync conn known-basis-t))
+```
+
+The two-argument form waits for a DB whose basis is at least the supplied `t`.
+The no-argument form captures all transactions complete when it is called.
+
+VevDB does not currently expose Datomic stored functions through the Clojure
+API. In particular, it does not persist or evaluate arbitrary host-language
+code, and `vev.core` does not add a callback-registration API that Datomic
+itself does not have.
 
 Immutable DB values support Datomic/DataScript-style `with` operations:
 
@@ -342,7 +355,7 @@ handles. Use them like Datomic DB values; they do not normally need
 needs deterministic release.
 
 Connections and explicitly allocated helpers such as transaction builders,
-function registries, prepared queries, and prepared pull patterns own
+query-function registries, prepared queries, and prepared pull patterns own
 long-lived resources. Close those when their application lifecycle ends;
 `with-open` remains useful at those explicit resource boundaries.
 

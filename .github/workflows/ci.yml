@@ -50,6 +50,15 @@ jobs:
         run: |
           clojure -P
           clojure -M:dev -e "(require 'vev.core)"
+      - name: Verify source matches VevDB main
+        working-directory: vev-clj
+        run: |
+          curl --fail --location --retry 5 --retry-all-errors \
+            --silent --show-error \
+            --output core-main.clj \
+            https://raw.githubusercontent.com/vevdb/vev/main/clients/clojure/src/vev/core.clj
+          git diff --no-index --ignore-space-at-eol --exit-code \
+            src/vev/core.clj core-main.clj
       - name: Build the Clojure jar
         working-directory: vev-clj
         run: mvn --batch-mode --no-transfer-progress verify
