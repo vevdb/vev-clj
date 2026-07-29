@@ -2,4 +2,8 @@
  :deps {com.vevdb/vev-java {:mvn/version "0.2.2"}}
  :aliases
  {:dev
-  {:jvm-opts ["--enable-native-access=ALL-UNNAMED"]}}}
+  {:jvm-opts ["--enable-native-access=ALL-UNNAMED"]}
+  :test
+  {:extra-paths ["test"]
+   :jvm-opts ["--enable-native-access=ALL-UNNAMED"]
+   :main-opts ["-m" "vev.test-runner"]}}}

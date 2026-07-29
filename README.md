@@ -80,6 +80,27 @@ Durable usage should be similarly direct:
 (d/q '[:find ?name :where [?e :user/name ?name]] (d/db conn))
 ```
 
+For a Datomic tutorial, the usual changes are the namespace, embedded store
+setup, and removal of the transaction future dereference:
+
+```diff
+- (require '[datomic.api :as d])
++ (require '[vev.core :as d])
+
+- (d/create-database uri)
+- (def conn (d/connect uri))
++ (def conn (d/connect "app.vev"))
+
+- (def report @(d/transact conn tx))
++ (def report  (d/transact conn tx))
+```
+
+Schema, transaction data, queries, pull patterns, lookup refs, entities, and
+immutable DB operations otherwise use the same model. The full
+[Datomic and VevDB guide](https://github.com/vevdb/vev/blob/main/docs/datomic-syntax.md)
+lists supported Peer operations, intentional differences, and deliberate
+non-goals.
+
 Historical database filters use the Datomic names, argument order, and
 inclusive/exclusive boundaries. `#inst` is a `java.util.Date`, so the same form
 works with Datomic Peer and Vev:
@@ -292,14 +313,15 @@ Returned datoms support keyword lookup and indexed access, for example
 `(:v datom)` and `(nth datom 2)`.
 
 Use `db` for ordinary reads. When coordinating with another connection or
-process, `sync` returns a future in the Datomic shape:
+process, `sync` waits and returns the coordinated DB directly:
 
 ```clojure
-(def coordinated-db @(d/sync conn known-basis-t))
+(def coordinated-db (d/sync conn known-basis-t))
 ```
 
 The two-argument form waits for a DB whose basis is at least the supplied `t`.
 The no-argument form captures all transactions complete when it is called.
+This is an intentional embedded-model adaptation from Datomic Peer's future.
 
 VevDB does not currently expose Datomic stored functions through the Clojure
 API. In particular, it does not persist or evaluate arbitrary host-language
@@ -311,10 +333,17 @@ Immutable DB values support Datomic/DataScript-style `with` operations:
 ```clojure
 (let [report (d/with db [{:db/id 3 :user/name "Barbara"}])
       next-db (d/db-with db [{:db/id 3 :user/name "Barbara"}])]
-  [(:ok report)
+  [(keys report)
    (d/q '[:find ?e :where [?e :user/name "Barbara"]] db)
+   (d/q '[:find ?e :where [?e :user/name "Barbara"]]
+        (:db-after report))
    (d/q '[:find ?e :where [?e :user/name "Barbara"]] next-db)])
 ```
+
+`transact` and `with` synchronously return
+`:db-before`, `:db-after`, `:tx-data`, and `:tempids`. Rejected transactions
+throw `ExceptionInfo`, as ordinary Peer code expects. `try-transact` and
+`try-with` are Vev extensions for callers that prefer explicit result values.
 
 A mutable connection can also be initialized from an immutable DB snapshot:
 
@@ -360,7 +389,7 @@ long-lived resources. Close those when their application lifecycle ends;
 
 The current package is deliberately thin:
 
-- `transact` and `with` return transaction report maps from typed native report handles
+- `transact` and `with` return Datomic-shaped transaction reports directly
 - `transact-text` and `with-text` return raw EDN report strings
 - `q` returns a set of row vectors
 - `rows` returns an ordered vector of row vectors
