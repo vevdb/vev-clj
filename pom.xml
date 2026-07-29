@@ -6,7 +6,7 @@
 
   <groupId>com.vevdb</groupId>
   <artifactId>vev-clj</artifactId>
-  <version>0.2.1</version>
+  <version>0.2.2</version>
   <name>VevDB for Clojure</name>
   <description>Clojure API for the VevDB embedded database.</description>
   <url>https://github.com/vevdb/vev-clj</url>
@@ -28,14 +28,14 @@
     <connection>scm:git:https://github.com/vevdb/vev-clj.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/vevdb/vev-clj.git</developerConnection>
     <url>https://github.com/vevdb/vev-clj</url>
-    <tag>v0.2.1</tag>
+    <tag>v0.2.2</tag>
   </scm>
 
   <dependencies>
     <dependency>
       <groupId>com.vevdb</groupId>
       <artifactId>vev-java</artifactId>
-      <version>0.2.1</version>
+      <version>0.2.2</version>
     </dependency>
   </dependencies>
 
