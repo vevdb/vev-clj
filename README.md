@@ -80,6 +80,26 @@ Durable usage should be similarly direct:
 (d/q '[:find ?name :where [?e :user/name ?name]] (d/db conn))
 ```
 
+## Direct SQLite
+
+`vev.sqlite` opens separate application SQLite files using the SQLite bundled
+with VevDB. It is useful for ordinary SQL data that does not belong in VevDB
+fact history.
+
+```clojure
+(require '[vev.sqlite :as sql])
+
+(def app-db (sql/open "application.sqlite"))
+(sql/execute-script!
+ app-db "create table item(key text primary key, value blob)")
+(sql/execute! app-db "insert into item values(?,?)" ["example" "value"])
+(sql/query app-db "select key,value from item")
+```
+
+See the
+[Direct SQLite guide](https://github.com/vevdb/vev/blob/main/docs/sqlite.md)
+for parameters, transactions, prepared statements, batches, and streaming.
+
 For a Datomic tutorial, the usual changes are the namespace, embedded store
 setup, and removal of the transaction future dereference:
 
